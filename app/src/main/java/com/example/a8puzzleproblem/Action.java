@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Action {
 
+    enum action{NONE ,UP , DOWN , LEFT , RIGHT}
+
     public static int findZeroPosition(State state)
     {
         for (int i = 0; i < state.getTiles().size(); i++) {
@@ -20,6 +22,19 @@ public class Action {
         state.getTiles().set(firstIndex , state.getTiles().get(secondIndex));
         state.getTiles().set(secondIndex , temp);
     }
+
+    public static State creatState(State state)
+    {
+        ArrayList<Integer> tiles=new ArrayList<>();
+        for (int i = 0; i < state.getTiles().size(); i++) {
+            tiles.add(state.getTiles().get(i));
+        }
+
+        State newState=new State(tiles);
+        return newState;
+
+    }
+
     public static State moveToLeft(State state)
     {
         int zeroPosition=findZeroPosition(state);
@@ -31,11 +46,12 @@ public class Action {
         }
         else
         {
-            State finalState=state;
+            State finalState=creatState(state);
             swap(zeroPosition , zeroPosition-1 , finalState);
             return finalState;
         }
     }
+
     public static State moveToRight(State state)
     {
         int zeroPosition=findZeroPosition(state);
@@ -47,7 +63,7 @@ public class Action {
         }
         else
         {
-            State finalState=state;
+            State finalState=creatState(state);
             swap(zeroPosition , zeroPosition+1 , finalState);
             return finalState;
         }
@@ -63,7 +79,7 @@ public class Action {
         }
         else
         {
-            State finalState=state;
+            State finalState=creatState(state);
             swap(zeroPosition , zeroPosition-3 , finalState);
             return finalState;
         }
@@ -79,7 +95,7 @@ public class Action {
         }
         else
         {
-            State finalState=state;
+            State finalState=creatState(state);
             swap(zeroPosition , zeroPosition+3 , finalState);
             return finalState;
         }

@@ -17,4 +17,15 @@ public class State {
     public void setTiles(ArrayList<Integer> tiles) {
         this.tiles = tiles;
     }
+
+    public static boolean compareStates(State state1, State state2)
+    {
+        for (int i = 0; i < state1.getTiles().size(); i++) {
+            if (state1.getTiles().get(i)!=state2.getTiles().get(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

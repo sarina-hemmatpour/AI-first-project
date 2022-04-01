@@ -10,23 +10,25 @@ public class Node {
     private int depth;
     private Node parent;
     private ArrayList<Node> children;
+    private Action.action preAction;
 
-    public Node(State state, Node parent) {
+    public Node(State state, Node parent , Action.action pAction) {
         this.state = state;
         this.parent = parent;
         pathCost=1;
         totalPathCost=parent.getTotalPathCost()+pathCost;
         children=new ArrayList<>();
         depth=parent.getDepth()+1;
+        preAction=pAction;
     }
 
-    public Node(State state, int pathCost, int totalPathCost, int depth, Node parent, ArrayList<Node> children) {
+    public Node(State state, int pathCost, int totalPathCost, int depth, Node parent) {
         this.state = state;
         this.pathCost = pathCost;
         this.totalPathCost = totalPathCost;
         this.depth = depth;
         this.parent = parent;
-        this.children = children;
+        preAction= Action.action.NONE;
     }
 
     public State getState() {
@@ -75,5 +77,13 @@ public class Node {
 
     public void setChildren(ArrayList<Node> children) {
         this.children = children;
+    }
+
+    public Action.action getPreAction() {
+        return preAction;
+    }
+
+    public void setPreAction(Action.action preAction) {
+        this.preAction = preAction;
     }
 }
