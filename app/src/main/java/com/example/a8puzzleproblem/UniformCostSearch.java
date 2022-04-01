@@ -56,7 +56,7 @@ public class UniformCostSearch implements Information{
         }
         else
         {
-            addToFring(initialNode);
+            addToFringe(initialNode);
 
             for (int i = 0; i < fringe.size(); i++) {
 
@@ -202,7 +202,7 @@ public class UniformCostSearch implements Information{
         return lowest;
     }
 
-    public void addToFring(Node node)
+    public void addToFringe(Node node)
     {
         fringe.add(node);
     }
