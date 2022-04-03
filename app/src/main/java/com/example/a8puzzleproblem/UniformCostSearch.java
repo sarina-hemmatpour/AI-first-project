@@ -268,40 +268,12 @@ public class UniformCostSearch implements Information{
         System.out.println("=========================================");
     }
 
-    public int count()
-    {
-        int[][] temp=new int[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                temp[i][j]=initialNode.getState().getTiles().get(3*i+j);
-            }
-        }
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                System.out.print(temp[i][j]+ " ");
-//            }
-//            System.out.println();
-//        }
-        int count=0;
-        for (int i = 0; i < 3 - 1; i++)
-        {
-            for (int j = i + 1; j < 3; j++)
-            {
-                if (temp[j][i] > 0 && temp[j][i] > temp[i][j])
-                {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
+
 
     @Override
     public boolean isSolvable() {
 
-        int c=count();
-        System.out.println(c);
-        return (c%2==0);
+        return Solve.isSolvable(initialNode);
     }
 
     @Override

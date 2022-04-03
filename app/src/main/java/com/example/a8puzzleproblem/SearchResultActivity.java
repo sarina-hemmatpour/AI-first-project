@@ -62,21 +62,27 @@ public class SearchResultActivity extends AppCompatActivity {
     {
         AStarSearch search=new AStarSearch(initialNode);
         Node result = null;
-        if (h==1)
-        {
-            result=search.search(1);
-        }
-        else if(h==2)
-        {
-            result=search.search(2);
-        }
 
-        if (result.equals(null))
+        if (!search.isSolvable())
         {
             tvProcessing.setText("Not Solvable");
+            tvProcessing.setVisibility(View.VISIBLE);
+            llResult.setVisibility(View.GONE);
+
         }
         else
         {
+
+            //searching
+            if (h==1)
+            {
+                result=search.search(1);
+            }
+            else if(h==2)
+            {
+                result=search.search(2);
+            }
+
             tvProcessing.setVisibility(View.GONE);
             llResult.setVisibility(View.VISIBLE);
 
@@ -109,14 +115,18 @@ public class SearchResultActivity extends AppCompatActivity {
     public void ids(Node initialNode)
     {
         IterativeDeepeningSearch search=new IterativeDeepeningSearch(initialNode);
-        Node result=search.search();
 
-        if (result.equals(null))
+        if (!search.isSolvable())
         {
             tvProcessing.setText("Not Solvable");
+            tvProcessing.setVisibility(View.VISIBLE);
+            llResult.setVisibility(View.GONE);
         }
         else
         {
+            //searching
+            Node result=search.search();
+
             tvProcessing.setVisibility(View.GONE);
             llResult.setVisibility(View.VISIBLE);
 
@@ -143,14 +153,19 @@ public class SearchResultActivity extends AppCompatActivity {
     public void ucs(Node initialNode)
     {
         UniformCostSearch search=new UniformCostSearch(initialNode);
-        Node result=search.search();
 
-        if (result.equals(null))
+
+        if (!search.isSolvable())
         {
             tvProcessing.setText("Not Solvable");
+            tvProcessing.setVisibility(View.VISIBLE);
+            llResult.setVisibility(View.GONE);
         }
         else
         {
+            //searching
+            Node result=search.search();
+
             tvProcessing.setVisibility(View.GONE);
             llResult.setVisibility(View.VISIBLE);
 

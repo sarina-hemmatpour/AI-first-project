@@ -257,7 +257,7 @@ public class IterativeDeepeningSearch implements Information{
 
     @Override
     public boolean isSolvable() {
-        return true;
+        return Solve.isSolvable(initialNode);
     }
 
     @Override

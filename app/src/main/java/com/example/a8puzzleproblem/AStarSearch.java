@@ -379,7 +379,7 @@ public class AStarSearch implements Information {
 
     @Override
     public boolean isSolvable() {
-        return true;
+        return Solve.isSolvable(initialNode);
     }
 
     @Override
