@@ -94,6 +94,55 @@ public class AStarSearch implements Information {
         return null;
     }
 
+    public String savePuzzle(Node node)
+    {
+        String result = "";
+        for (int i = 0; i < node.getState().getTiles().size(); i++) {
+            result+=(node.getState().getTiles().get(i)+"   ");
+            if (i==2 || i==5 || i==8)
+            {
+                result+="\n";
+            }
+        }
+        return result;
+    }
+    public String savePath(Node node , String result)
+    {
+        if (node.getDepth()!=0)
+        {
+            result+=savePath(node.getParent() , result);
+        }
+        result+=savePuzzle(node);
+        result+="\n";
+        return result;
+    }
+
+    public String saveActions(ArrayList<Action.action> actions)
+    {
+        String result="";
+        for (int i = actions.size()-1; i>=0 ; i--) {
+            switch (actions.get(i))
+            {
+                case NONE:
+                    break;
+                case UP:
+                    result+="UP  ";
+                    break;
+                case DOWN:
+                    result+="DOWN  ";
+                    break;
+                case LEFT:
+                    result+="LEFT  ";
+                    break;
+                case RIGHT:
+                    result+="RIGHT  ";
+                    break;
+            }
+        }
+
+        return result;
+    }
+
     public int findInVisitedNodes(Node node)
     {
         for (int i = 0; i < visitedNodes.size(); i++) {
