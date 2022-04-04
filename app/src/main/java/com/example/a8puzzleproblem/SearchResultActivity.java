@@ -73,6 +73,9 @@ public class SearchResultActivity extends AppCompatActivity {
         else
         {
 
+            //time
+            long startTime=System.currentTimeMillis();
+
             //searching
             if (h==1)
             {
@@ -82,6 +85,11 @@ public class SearchResultActivity extends AppCompatActivity {
             {
                 result=search.search(2);
             }
+
+            String string="";
+            string+=Time.timeDuration(startTime,System.currentTimeMillis());
+            string+=" ms";
+            tvTotalTime.setText(string);
 
             tvProcessing.setVisibility(View.GONE);
             llResult.setVisibility(View.VISIBLE);
@@ -124,8 +132,15 @@ public class SearchResultActivity extends AppCompatActivity {
         }
         else
         {
+            //time
+            long startTime=System.currentTimeMillis();
             //searching
             Node result=search.search();
+
+            String string="";
+            string+=Time.timeDuration(startTime,System.currentTimeMillis());
+            string+=" ms";
+            tvTotalTime.setText(string);
 
             tvProcessing.setVisibility(View.GONE);
             llResult.setVisibility(View.VISIBLE);
@@ -163,8 +178,15 @@ public class SearchResultActivity extends AppCompatActivity {
         }
         else
         {
+            //time
+            long startTime=System.currentTimeMillis();
             //searching
             Node result=search.search();
+
+            String string="";
+            string+=Time.timeDuration(startTime,System.currentTimeMillis());
+            string+=" ms";
+            tvTotalTime.setText(string);
 
             tvProcessing.setVisibility(View.GONE);
             llResult.setVisibility(View.VISIBLE);

@@ -50,7 +50,7 @@ public class AStarSearch implements Information {
         {
             addToFringe(initialNode);
 
-            for (int i = 0; i < fringe.size(); i++) {
+            for (int i = 0; fringe.size()!=0; i++) {
 
                 Node toExpandNode=checkFringe(hNumber);
 

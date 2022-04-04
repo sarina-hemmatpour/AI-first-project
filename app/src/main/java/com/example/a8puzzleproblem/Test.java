@@ -1,6 +1,7 @@
 package com.example.a8puzzleproblem;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Test {
     public static void main(String[] args)
@@ -37,10 +38,10 @@ public class Test {
         ArrayList<Integer> integers2=new ArrayList<>();
         integers.add(1);
         integers.add(2);
-        integers.add(5);
         integers.add(0);
         integers.add(3);
         integers.add(4);
+        integers.add(5);
         integers.add(6);
         integers.add(7);
         integers.add(8);
@@ -55,20 +56,25 @@ public class Test {
         integers2.add(7);
         integers2.add(6);
         integers2.add(5);
-//        IterativeDeepeningSearch iterativeDeepeningSearch=new IterativeDeepeningSearch(startNode);
-//        iterativeDeepeningSearch.search();
+
 
 //        AStarSearch aStarSearch=new AStarSearch(startNode);
 //        aStarSearch.search(2);
 
 //
 //        System.out.println(RandomNumbers.randomPuzzle());
-        Node startNode=new Node(new State(integers2) , 0 ,0 ,0 ,null );
+        Node startNode=new Node(new State(integers) , 0 ,0 ,0 ,null );
 
-        System.out.println(Solve.isSolvable(startNode));
 
-        UniformCostSearch uniformCostSearch=new UniformCostSearch(startNode);
-        uniformCostSearch.search();
+
+        long s=System.currentTimeMillis();
+
+//        UniformCostSearch uniformCostSearch=new UniformCostSearch(startNode);
+//        uniformCostSearch.search();
+
+        IterativeDeepeningSearch iterativeDeepeningSearch=new IterativeDeepeningSearch(startNode);
+        iterativeDeepeningSearch.search();
+        System.out.println(Time.timeDuration(s,System.currentTimeMillis()));
 
 
     }

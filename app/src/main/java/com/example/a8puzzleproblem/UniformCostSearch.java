@@ -56,9 +56,10 @@ public class UniformCostSearch implements Information{
         }
         else
         {
+
             addToFringe(initialNode);
 
-            for (int i = 0; i < fringe.size(); i++) {
+            for (int i = 0; fringe.size()!=0 ; i++) {
 
                 Node toExpandNode=checkFringe();
 
@@ -79,9 +80,9 @@ public class UniformCostSearch implements Information{
                         //expand it
                         expand(toExpandNode);
                         visitedNodes.add(toExpandNode);
-                        fringe.remove(toExpandNode);
-                        i=0;
                     }
+                    fringe.remove(toExpandNode);
+                    i=0;
                 }
             }
         }
