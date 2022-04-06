@@ -2,22 +2,18 @@ package com.example.a8puzzleproblem;
 
 import java.util.ArrayList;
 
-public class IterativeDeepeningSearch implements Information{
+public class IterativeDeepeningAStarSearch implements Information{
+
     private ArrayList<Node> fringe;
     private ArrayList<Node> visitedNodes;
     private Node initialNode;
-    private int limit=0;
+    private int limit;
 
 
-    public IterativeDeepeningSearch(Node initialNode) {
-        this.initialNode = initialNode;
+    public IterativeDeepeningAStarSearch(Node initialNode) {
         fringe=new ArrayList<>();
         visitedNodes=new ArrayList<>();
-        limit=0;
-    }
-
-    public ArrayList<Node> getFringe() {
-        return fringe;
+        this.initialNode = initialNode;
     }
 
     public int getLimit() {
@@ -26,6 +22,10 @@ public class IterativeDeepeningSearch implements Information{
 
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    public ArrayList<Node> getFringe() {
+        return fringe;
     }
 
     public void setFringe(ArrayList<Node> fringe) {
@@ -48,81 +48,228 @@ public class IterativeDeepeningSearch implements Information{
         this.initialNode = initialNode;
     }
 
-    public static boolean isGoal(Node node)
-    {
-        int test=node.getState().getTiles().get(0);
-        for (int i = 1; i < node.getState().getTiles().size(); i++) {
-            if (test>node.getState().getTiles().get(i))
-            {
-                return false;
-            }
-            test=node.getState().getTiles().get(i);
-        }
 
-        return true;
-    }
-
-    public void showPuzzle(Node node)
+    public Node search(int hNumber)
     {
-        for (int i = 0; i < node.getState().getTiles().size(); i++) {
-            System.out.print(node.getState().getTiles().get(i)+" ");
-            if (i==2 || i==5 || i==8)
-            {
-                System.out.println(" ");
-            }
-        }
-    }
+        limit=heuristicFunction(hNumber , initialNode);
 
-    public Node search()
-    {
         while (true)
         {
             if (!isSolvable())
             {
                 System.out.println("Not solvable");
-                break;
+                return null;
             }
             else
             {
                 addToFringe(initialNode);
 
-                for (int i = 0;  fringe.size()!=0;i++ ) {
+                for (int i = 0; fringe.size()!=0; i++) {
 
-                    Node toExpandNode=checkFringe();
-
+                    Node toExpandNode=checkFringe(hNumber);
                     if (isGoal(toExpandNode))
                     {
                         return toExpandNode;
                     }
                     else
                     {
-                        if (!isVisited(toExpandNode) )
+                        if (!isVisited(toExpandNode))
                         {
-                            if (toExpandNode.getDepth()<limit)
+                            //expand it
+                            if (aStarScore(toExpandNode ,hNumber )<limit)
                             {
-                                //expand it
                                 expand(toExpandNode);
-//                            showPuzzle(toExpandNode);
                                 visitedNodes.add(toExpandNode);
                             }
 
                         }
+                        else
+                        {
+                            int indexInVisited=findInVisitedNodes(toExpandNode);
+                            if (aStarScore(toExpandNode ,hNumber )<
+                                    aStarScore(visitedNodes.get(indexInVisited) , hNumber))
+                            {
+                                if (aStarScore(toExpandNode ,hNumber )<limit)
+                                {
+                                    //expand it
+                                    expand(toExpandNode);
+                                    //replace it in visited nodes
+                                    visitedNodes.remove(indexInVisited);
+                                    visitedNodes.add(toExpandNode);
+                                }
+
+                            }
+                        }
+
                         fringe.remove(toExpandNode);
                         i=0;
-
                     }
                 }
 
                 //did not find the goal
+                //start over:
                 visitedNodes.clear();
                 fringe.clear();
-                limit++;
-
+                limit+=2;
             }
         }
 
-        return null;
     }
+
+
+
+
+    public String savePuzzle(Node node)
+    {
+        String result = "";
+        for (int i = 0; i < node.getState().getTiles().size(); i++) {
+            result+=(node.getState().getTiles().get(i)+"   ");
+            if (i==2 || i==5 || i==8)
+            {
+                result+="\n";
+            }
+        }
+        return result;
+    }
+    public String savePath(Node node , String result)
+    {
+        if (node.getDepth()!=0)
+        {
+            result+=savePath(node.getParent() , result);
+        }
+        result+=savePuzzle(node);
+        result+="\n";
+        return result;
+    }
+
+    public String saveActions(ArrayList<Action.action> actions)
+    {
+        String result="";
+        for (int i = actions.size()-1; i>=0 ; i--) {
+            switch (actions.get(i))
+            {
+                case NONE:
+                    break;
+                case UP:
+                    result+="UP  ";
+                    break;
+                case DOWN:
+                    result+="DOWN  ";
+                    break;
+                case LEFT:
+                    result+="LEFT  ";
+                    break;
+                case RIGHT:
+                    result+="RIGHT  ";
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    public int findInVisitedNodes(Node node)
+    {
+        for (int i = 0; i < visitedNodes.size(); i++) {
+            if (State.compareStates(node.getState() , visitedNodes.get(i).getState()))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+
+    public int aStarScore(Node node ,int hNumber)
+    {
+        return node.getTotalPathCost()+heuristicFunction(hNumber , node);
+    }
+
+    public Node checkFringe(int hNumber)
+    {
+        Node lowest=fringe.get(0);
+        for (int i = 1; i < fringe.size(); i++) {
+            int fLowest=aStarScore(lowest , hNumber);
+            int fNext=aStarScore(fringe.get(i)  , hNumber);
+            if (fLowest>fNext)
+            {
+                lowest=fringe.get(i);
+            }
+        }
+        return lowest;
+    }
+
+
+    public int heuristicFunction(int i , Node node)
+    {
+        if (i==1)
+        {
+            return firstHeuristicFunction(node);
+        }
+        else if (i==2)
+        {
+            return secondHeuristicFunction(node);
+        }
+
+        return -1;
+    }
+
+    public int firstHeuristicFunction(Node node)
+    {
+        int count=0;
+
+        for (int i = 0; i < 9; i++) {
+            if (node.getState().getTiles().get(i)!= 0 && node.getState().getTiles().get(i)!=i)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public int secondHeuristicFunction(Node node)
+    {
+        int[][] temp=new int[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                temp[i][j]=node.getState().getTiles().get(3*i+j);
+            }
+        }
+
+        int count=0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (temp[i][j]!=0)
+                {
+                    int[] d=destination(temp[i][j]);
+                    count+=Math.abs(i-d[0])+Math.abs(j-d[1]);
+                }
+            }
+        }
+
+        return count;
+    }
+    private int[] destination(int number)
+    {
+        int[] result=new int[2];
+        int[][] temp={{0,1,2},{3,4,5},{6,7,8}};
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (number==temp[i][j])
+                {
+                    result[0]=i;
+                    result[1]=j;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
     public void expand(Node node)
     {
         node.setChildren(generateChildren(node));
@@ -192,26 +339,8 @@ public class IterativeDeepeningSearch implements Information{
 
     }
 
-    public Node checkFringe()
-    {
-        Node deepest=fringe.get(0);
-        for (int i = 1; i < fringe.size(); i++) {
-            if (deepest.getTotalPathCost()<
-                    fringe.get(i).getTotalPathCost())
-            {
-                deepest=fringe.get(i);
-            }
-        }
-        return deepest;
-    }
 
 
-
-
-    public void addToFringe(Node node)
-    {
-        fringe.add(node);
-    }
 
     public boolean isVisited(Node node)
     {
@@ -230,6 +359,36 @@ public class IterativeDeepeningSearch implements Information{
         }
 
         return true;
+    }
+    public void addToFringe(Node node)
+    {
+        fringe.add(node);
+    }
+
+    //if a node is goal state returns true : 0 1 2 3 4 5 6 7 8
+    public static boolean isGoal(Node node)
+    {
+        int test=node.getState().getTiles().get(0);
+        for (int i = 1; i < node.getState().getTiles().size(); i++) {
+            if (test>node.getState().getTiles().get(i))
+            {
+                return false;
+            }
+            test=node.getState().getTiles().get(i);
+        }
+
+        return true;
+    }
+
+    public void showPuzzle(Node node)
+    {
+        for (int i = 0; i < node.getState().getTiles().size(); i++) {
+            System.out.print(node.getState().getTiles().get(i)+" ");
+            if (i==2 || i==5 || i==8)
+            {
+                System.out.println(" ");
+            }
+        }
     }
 
     public void showPath(Node node)
@@ -260,55 +419,6 @@ public class IterativeDeepeningSearch implements Information{
         }
 
         return actions;
-    }
-
-    public String savePuzzle(Node node)
-    {
-        String result = "";
-        for (int i = 0; i < node.getState().getTiles().size(); i++) {
-            result+=(node.getState().getTiles().get(i)+"   ");
-            if (i==2 || i==5 || i==8)
-            {
-                result+="\n";
-            }
-        }
-        return result;
-    }
-    public String savePath(Node node , String result)
-    {
-        if (node.getDepth()!=0)
-        {
-            result+=savePath(node.getParent() , result);
-        }
-        result+=savePuzzle(node);
-        result+="\n";
-        return result;
-    }
-
-    public String saveActions(ArrayList<Action.action> actions)
-    {
-        String result="";
-        for (int i = actions.size()-1; i>=0 ; i--) {
-            switch (actions.get(i))
-            {
-                case NONE:
-                    break;
-                case UP:
-                    result+="UP  ";
-                    break;
-                case DOWN:
-                    result+="DOWN  ";
-                    break;
-                case LEFT:
-                    result+="LEFT  ";
-                    break;
-                case RIGHT:
-                    result+="RIGHT  ";
-                    break;
-            }
-        }
-
-        return result;
     }
 
     public void showActions(ArrayList<Action.action> actions)

@@ -53,9 +53,72 @@ public class SearchResultActivity extends AppCompatActivity {
                 break;
             case 4:
                 //IDA*
+                idaStar(initialNode,selectedHeuristic);
                 break;
         }
 
+    }
+
+    public void idaStar(Node initialNode , int h)
+    {
+        IterativeDeepeningAStarSearch search=new IterativeDeepeningAStarSearch(initialNode);
+        Node result = null;
+
+        if (!search.isSolvable())
+        {
+            tvProcessing.setText("Not Solvable");
+            tvProcessing.setVisibility(View.VISIBLE);
+            llResult.setVisibility(View.GONE);
+
+        }
+        else
+        {
+
+            //time
+            long startTime=System.nanoTime();
+
+            //searching
+            if (h==1)
+            {
+                result=search.search(1);
+            }
+            else if(h==2)
+            {
+                result=search.search(2);
+            }
+
+            String string="";
+            string+=Time.timeDuration(startTime,System.nanoTime());
+            string+=" ns";
+            tvTotalTime.setText(string);
+
+            tvProcessing.setVisibility(View.GONE);
+            llResult.setVisibility(View.VISIBLE);
+
+            //set Result
+            tvResult.setText("\n"+search.savePath(result, ""));
+            if (h==1)
+            {
+                tvTitle.setText(tvTitle.getText().toString() +" A* Search (first heuristic function)");
+            }
+            else if (h==2)
+            {
+                tvTitle.setText(tvTitle.getText().toString() +" A* Search (second heuristic function)");
+            }
+            tvIsSolvable.setText("Yes");
+            tvActions.setText(search.saveActions(search.setOfActions(result)));
+            String s="";
+            s+=search.totalCost(result);
+            tvTotalCost.setText(s);
+            s="";
+            s+=result.getDepth();
+            tvDepth.setText(s);
+            s="";
+            s+=search.numberOfExpandedNodes();
+            tvExpandedNodes.setText(s);
+
+
+        }
     }
 
     public void aStar(Node initialNode , int h)
@@ -74,7 +137,7 @@ public class SearchResultActivity extends AppCompatActivity {
         {
 
             //time
-            long startTime=System.currentTimeMillis();
+            long startTime=System.nanoTime();
 
             //searching
             if (h==1)
@@ -87,8 +150,8 @@ public class SearchResultActivity extends AppCompatActivity {
             }
 
             String string="";
-            string+=Time.timeDuration(startTime,System.currentTimeMillis());
-            string+=" ms";
+            string+=Time.timeDuration(startTime,System.nanoTime());
+            string+=" ns";
             tvTotalTime.setText(string);
 
             tvProcessing.setVisibility(View.GONE);
@@ -133,13 +196,13 @@ public class SearchResultActivity extends AppCompatActivity {
         else
         {
             //time
-            long startTime=System.currentTimeMillis();
+            long startTime=System.nanoTime();
             //searching
             Node result=search.search();
 
             String string="";
-            string+=Time.timeDuration(startTime,System.currentTimeMillis());
-            string+=" ms";
+            string+=Time.timeDuration(startTime,System.nanoTime());
+            string+=" ns";
             tvTotalTime.setText(string);
 
             tvProcessing.setVisibility(View.GONE);
@@ -179,13 +242,13 @@ public class SearchResultActivity extends AppCompatActivity {
         else
         {
             //time
-            long startTime=System.currentTimeMillis();
+            long startTime=System.nanoTime();
             //searching
             Node result=search.search();
 
             String string="";
-            string+=Time.timeDuration(startTime,System.currentTimeMillis());
-            string+=" ms";
+            string+=Time.timeDuration(startTime,System.nanoTime());
+            string+=" ns";
             tvTotalTime.setText(string);
 
             tvProcessing.setVisibility(View.GONE);

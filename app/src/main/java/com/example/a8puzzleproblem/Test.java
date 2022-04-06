@@ -3,6 +3,8 @@ package com.example.a8puzzleproblem;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.xml.transform.Source;
+
 public class Test {
     public static void main(String[] args)
     {
@@ -38,8 +40,8 @@ public class Test {
         ArrayList<Integer> integers2=new ArrayList<>();
         integers.add(1);
         integers.add(2);
-        integers.add(0);
         integers.add(3);
+        integers.add(0);
         integers.add(4);
         integers.add(5);
         integers.add(6);
@@ -72,9 +74,24 @@ public class Test {
 //        UniformCostSearch uniformCostSearch=new UniformCostSearch(startNode);
 //        uniformCostSearch.search();
 
+        System.out.println("IDS:");
         IterativeDeepeningSearch iterativeDeepeningSearch=new IterativeDeepeningSearch(startNode);
         iterativeDeepeningSearch.search();
         System.out.println(Time.timeDuration(s,System.currentTimeMillis()));
+
+        s=System.currentTimeMillis();
+        System.out.println("A*:");
+        AStarSearch aStarSearch=new AStarSearch(startNode);
+        aStarSearch.search(1);
+        System.out.println(Time.timeDuration(s,System.currentTimeMillis()));
+
+
+        s=System.currentTimeMillis();
+        System.out.println("IDA*:");
+        IterativeDeepeningAStarSearch ida=new IterativeDeepeningAStarSearch(startNode);
+        ida.search(1);
+        System.out.println(Time.timeDuration(s,System.currentTimeMillis()));
+
 
 
     }

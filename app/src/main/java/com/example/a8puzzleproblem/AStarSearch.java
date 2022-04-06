@@ -8,11 +8,15 @@ public class AStarSearch implements Information {
     private ArrayList<Node> visitedNodes;
     private Node initialNode;
 
+
     public AStarSearch(Node initialNode) {
         this.initialNode = initialNode;
         fringe=new ArrayList<>();
         visitedNodes=new ArrayList<>();
     }
+
+
+
 
     public ArrayList<Node> getFringe() {
         return fringe;
@@ -57,11 +61,6 @@ public class AStarSearch implements Information {
 //                showPuzzle(toExpandNode);
                 if (isGoal(toExpandNode))
                 {
-                    showPath(toExpandNode);
-                    System.out.println("n:"+numberOfExpandedNodes());
-                    System.out.println("tc:"+totalCost(toExpandNode));
-                    System.out.println("d:"+depth(toExpandNode));
-                    showActions(setOfActions(toExpandNode));
                     return toExpandNode;
                 }
                 else
@@ -74,8 +73,11 @@ public class AStarSearch implements Information {
                     }
                     else
                     {
-                        int indexInVisited=findInVisitedNodes(toExpandNode);
-                        if (aStarScore(toExpandNode ,hNumber )<aStarScore(visitedNodes.get(indexInVisited) , hNumber))
+                        int indexInVisited=
+                                findInVisitedNodes(toExpandNode);
+                        if (aStarScore(toExpandNode ,hNumber )<
+                                aStarScore(visitedNodes.get(indexInVisited)
+                                        , hNumber))
                         {
                             //expand it
                             expand(toExpandNode);
@@ -195,7 +197,8 @@ public class AStarSearch implements Information {
         int count=0;
 
         for (int i = 0; i < 9; i++) {
-            if (node.getState().getTiles().get(i)!= 0 && node.getState().getTiles().get(i)!=i)
+            if (node.getState().getTiles().get(i)!= 0 &&
+                    node.getState().getTiles().get(i)!=i)
             {
                 count++;
             }
@@ -301,13 +304,13 @@ public class AStarSearch implements Information {
             }
         }
 
-        System.out.println("node: " + depth(parentNode)+children.size());
-        for (int i = 0; i < children.size(); i++) {
-            System.out.print(children.get(i).getPreAction() +"  ");
-            System.out.println();
-            showPuzzle(children.get(i));
-        }
-        System.out.println();
+//        System.out.println("node: " + depth(parentNode)+children.size());
+//        for (int i = 0; i < children.size(); i++) {
+//            System.out.print(children.get(i).getPreAction() +"  ");
+//            System.out.println();
+//            showPuzzle(children.get(i));
+//        }
+//        System.out.println();
 
 
         return children;

@@ -50,7 +50,7 @@ public class UniformCostSearch implements Information{
     public Node search()
     {
         //check if it is solvable
-        if (false)
+        if (!isSolvable())
         {
             System.out.println("Not solvable");
         }
@@ -63,14 +63,8 @@ public class UniformCostSearch implements Information{
 
                 Node toExpandNode=checkFringe();
 
-//                showPuzzle(toExpandNode);
                 if (isGoal(toExpandNode))
                 {
-                    System.out.println(savePath(toExpandNode,""));
-                    System.out.println("n:"+numberOfExpandedNodes());
-                    System.out.println("tc:"+totalCost(toExpandNode));
-                    System.out.println("d:"+depth(toExpandNode));
-                    showActions(setOfActions(toExpandNode));
                     return toExpandNode;
                 }
                 else
@@ -192,12 +186,11 @@ public class UniformCostSearch implements Information{
     public Node checkFringe()
     {
         Node lowest=fringe.get(0);
-        int index=0;
         for (int i = 1; i < fringe.size(); i++) {
-            if (lowest.getTotalPathCost()>fringe.get(i).getTotalPathCost())
+            if (lowest.getTotalPathCost()>
+                    fringe.get(i).getTotalPathCost())
             {
                 lowest=fringe.get(i);
-                index=i;
             }
         }
         return lowest;
@@ -284,8 +277,6 @@ public class UniformCostSearch implements Information{
         for (int i = finalNode.getDepth(); i>0 ; i--) {
             actions.add(temp.getPreAction());
             temp=temp.getParent();
-//            System.out.println("actions:");
-//            showPuzzle(finalNode);
         }
 
         return actions;
